@@ -1,4 +1,4 @@
-/* globals define, module, jQuery */
+/* globals define, module */
 
 /*
  * Mailcheck https://github.com/mailcheck/mailcheck
@@ -297,28 +297,4 @@ if (typeof define === "function" && define.amd) {
   define("mailcheck", [], function() {
     return Mailcheck;
   });
-}
-
-if (typeof window !== 'undefined' && window.jQuery) {
-  (function($){
-    $.fn.mailcheck = function(opts) {
-      var self = this;
-      if (opts.suggested) {
-        var oldSuggested = opts.suggested;
-        opts.suggested = function(result) {
-          oldSuggested(self, result);
-        };
-      }
-
-      if (opts.empty) {
-        var oldEmpty = opts.empty;
-        opts.empty = function() {
-          oldEmpty.call(null, self);
-        };
-      }
-
-      opts.email = this.val();
-      Mailcheck.run(opts);
-    };
-  })(jQuery);
 }
