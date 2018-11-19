@@ -3,7 +3,7 @@ mailcheck.js
 
 [![TravisCI Build Status](https://secure.travis-ci.org/mailcheck/mailcheck.png?branch=master)](https://travis-ci.org/mailcheck/mailcheck)
 
-The Javascript library and jQuery plugin that suggests a right domain when your users misspell it in an email address.
+The Javascript library that suggests a right domain when your users misspell it in an email address.
 
 mailcheck.js is part of the [Mailcheck family](http://getmailcheck.org), and we're always on the lookout for more ports and adaptions. Get in touch!
 
@@ -35,49 +35,27 @@ For instant use, download the minified library [mailcheck.min.js](https://raw.gi
 > npm install --save mailcheck
 ```
 
-Usage with jQuery
------
+Usage on Node.js
+----------------
 
-First, include jQuery and Mailcheck into the page.
+If you're running this on Node.js, you can just `require('mailcheck')` to get the `mailcheck` object, and call `run` on that:
 
-```html
-<script src="jquery.min.js"></script>
-<script src="mailcheck.min.js"></script>
-```
+```js
+var mailcheck = require('mailcheck');
 
-Have a text field.
-
-```html
-<input id="email" name="email" type="email" />
-```
-
-Now, attach Mailcheck to the text field. You can declare an array of domains, second level domains and top level domains you want to check against.
-
-```html
-<script>
-var domains = ['gmail.com', 'aol.com'];
-var secondLevelDomains = ['hotmail']
-var topLevelDomains = ["com", "net", "org"];
-
-var superStringDistance = function(string1, string2) {
-  // a string distance algorithm of your choosing
-}
-
-$('#email').on('blur', function() {
-  $(this).mailcheck({
-    domains: domains,                       // optional
-    secondLevelDomains: secondLevelDomains, // optional
-    topLevelDomains: topLevelDomains,       // optional
-    distanceFunction: superStringDistance,  // optional
-    suggested: function(element, suggestion) {
-      // callback code
-    },
-    empty: function(element) {
-      // callback code
-    }
-  });
+mailcheck.run({
+  email: yourTextInput.value,
+  domains: domains,                       // optional
+  topLevelDomains: topLevelDomains,       // optional
+  secondLevelDomains: secondLevelDomains, // optional
+  distanceFunction: superStringDistance,  // optional
+  suggested: function(suggestion) {
+    // callback code
+  },
+  empty: function() {
+    // callback code
+  }
 });
-</script>
 ```
 
 Mailcheck takes in two callbacks, `suggested` and `empty`. We recommend you supply both.
@@ -94,46 +72,6 @@ Mailcheck takes in two callbacks, `suggested` and `empty`. We recommend you supp
 Mailcheck does not want to get in the way of how you can show suggestions. Use the suggestion object to display suggestions in your preferred manner.
 
 `empty` is called when there's no suggestion. Mailcheck just passes in the target element. It is a good idea to use this callback to clear an existing suggestion.
-
-Usage without jQuery
---------------------
-
-Mailcheck is decoupled from jQuery, so its usage without jQuery is almost identical.
-
-Using the example from above, you would call `Mailcheck.run` instead.
-
-```html
-<script>
-Mailcheck.run({
-  email: yourTextInput.value,
-  domains: domains,                       // optional
-  topLevelDomains: topLevelDomains,       // optional
-  secondLevelDomains: secondLevelDomains, // optional
-  distanceFunction: superStringDistance,  // optional
-  suggested: function(suggestion) {
-    // callback code
-  },
-  empty: function() {
-    // callback code
-  }
-});
-</script>
-```
-
-The rest works similarly. In fact, the Mailcheck jQuery plugin just wraps `Mailcheck.run`.
-
-Usage on Node.js
-----------------
-
-If you're running this on Node.js, you can just `require('mailcheck')` to get the `mailcheck` object, and call `run` on that:
-
-```js
-var mailcheck = require('mailcheck');
-
-mailcheck.run({
-  // see 'usage without jQuery' above.
-});
-```
 
 Domains
 -------
@@ -162,9 +100,6 @@ Mailcheck.defaultTopLevelDomains.push('com.au', 'ru') // extend existing TLDs
 
 Customization
 -------------
-
-The Mailcheck jQuery plugin wraps Mailcheck. The prime candidates for customization are the methods
-`Mailcheck.findClosestDomain` and `Mailcheck.stringDistance`.
 
 Mailcheck currently uses the [sift3](http://siderite.blogspot.com/2007/04/super-fast-and-accurate-string-distance.html) string similarity algorithm by [Siderite](http://siderite.blogspot.com/). You can modify the inbuilt string distance function, or pass in your own when calling Mailcheck.
 
